@@ -1,0 +1,171 @@
+<!-- Declara ao navegador que este documento segue o padrão moderno HTML5 -->
+<!DOCTYPE html>
+
+<!-- Inicia a estrutura principal da página e informa que o idioma é Português do Brasil -->
+<html lang="pt-BR">
+
+<!-- Abre a seção de configurações invisíveis da página (metadados, título e CSS) -->
+<head>
+
+  <!-- Define a codificação UTF-8 para exibir acentos e símbolos corretamente -->
+  <meta charset="UTF-8">
+
+  <!-- Ajusta a largura da página ao tamanho da tela do dispositivo -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Define o título que aparece na aba do navegador -->
+  <title>Radar de Ofertas | Promoções em Lojas Oficiais</title>
+
+  <!-- Conecta o HTML ao seu arquivo CSS dentro da pasta "assets" -->
+  <link rel="stylesheet" href="assets/css.css">
+
+<!-- Fecha a seção de configurações -->
+</head>
+
+<!-- Inicia o corpo visível da página -->
+<body>
+
+  <!-- Cria o cabeçalho superior do site -->
+  <header class="cabecalho">
+
+    <!-- Centraliza e organiza os itens do cabeçalho -->
+    <div class="container cabecalho-conteudo">
+
+      <!-- Define o nome principal da plataforma -->
+      <h1 class="logo">Radar de Ofertas</h1>
+
+      <!-- Cria o formulário de pesquisa -->
+      <form class="barra-busca" action="/" method="get">
+
+        <!-- Associa o rótulo invisível ao campo de pesquisa para acessibilidade -->
+        <label for="campo-pesquisa" class="sr-only">Buscar ofertas</label>
+
+        <!-- Cria a caixa de entrada de texto para pesquisar produtos -->
+        <input type="search" id="campo-pesquisa" name="q" placeholder="Buscar produto ou loja oficial...">
+
+        <!-- Cria o botão que envia o formulário -->
+        <button type="submit">Buscar</button>
+
+      <!-- Fecha o formulário -->
+      </form>
+
+      <!-- Cria o menu de navegação com links de categorias -->
+      <nav class="menu-categorias">
+
+        <!-- Links das categorias -->
+        <a href="#eletronicos">Eletrônicos</a>
+        <a href="#informatica">Informática</a>
+        <a href="#casa">Casa</a>
+
+      <!-- Fecha a barra de navegação -->
+      </nav>
+
+    <!-- Fecha o container do cabeçalho -->
+    </div>
+
+  <!-- Fecha o cabeçalho -->
+  </header>
+
+  <!-- Define a área de conteúdo principal -->
+  <main class="container">
+
+    <!-- Cria a faixa informativa no topo -->
+    <section class="banner-aviso">
+
+      <!-- Subtítulo explicativo -->
+      <h2>Ofertas verificadas direto nas lojas oficiais</h2>
+
+      <!-- Texto de apoio -->
+      <p>Compare preços reais e finalize sua compra com segurança no site oficial de cada varejista.</p>
+
+    <!-- Fecha o banner -->
+    </section>
+
+    <!-- Cria a grade que vai receber os cartões gerados pelo banco de dados -->
+    <section class="grade-produtos" aria-label="Lista de promoções">
+
+      <!-- COMANDO PYTHON (Jinja2): Inicia um laço de repetição que percorre cada produto da lista "ofertas" enviada pelo app.py -->
+      {% for item in ofertas %}
+
+        <!-- Inicia o molde único de cartão que será repetido para cada produto encontrado no banco -->
+        <article class="card-produto">
+
+          <!-- Insere dinamicamente o nome da loja ({{ item.loja }}) e a data da última atualização ({{ item.data }}) -->
+          <span class="selo-loja">Loja Oficial: {{ item.loja }} • {{ item.data }}</span>
+
+          <!-- Insere dinamicamente o link da imagem ({{ item.imagem }}) e o título ({{ item.titulo }}) vindos do banco -->
+          <img src="{{ item.imagem }}" alt="{{ item.titulo }}">
+
+          <!-- Agrupa os textos e o botão do cartão -->
+          <div class="card-corpo">
+
+            <!-- Exibe o nome do produto vindo do banco de dados -->
+            <h3 class="produto-titulo">{{ item.titulo }}</h3>
+
+            <!-- Agrupa os preços -->
+            <div class="precos">
+
+              <!-- COMANDO PYTHON: Condição que verifica se o desconto é maior que zero antes de mostrar o preço antigo riscado -->
+              {% if item.desconto > 0 %}
+                <!-- Exibe o preço anterior formatado em reais -->
+                <span class="preco-antigo">De: {{ item.preco_antigo }}</span>
+              <!-- Encerra a condição do preço antigo -->
+              {% endif %}
+
+              <!-- Exibe o preço atual formatado em reais -->
+              <p class="preco-atual">
+                Por: <strong>{{ item.preco_atual }}</strong>
+
+                <!-- COMANDO PYTHON: Só desenha a etiqueta verde de porcentagem se houver desconto real -->
+                {% if item.desconto > 0 %}
+                  <!-- Exibe o percentual de desconto calculado pelo Python -->
+                  <span class="desconto">-{{ item.desconto }}%</span>
+                <!-- Encerra a condição da etiqueta de desconto -->
+                {% endif %}
+              </p>
+
+            <!-- Fecha o bloco de preços -->
+            </div>
+
+            <!-- Insere dinamicamente o link da loja oficial ({{ item.link }}) no botão -->
+            <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer" class="btn-oferta">Ir para a loja oficial</a>
+
+          <!-- Fecha o corpo do cartão -->
+          </div>
+
+        <!-- Fecha o cartão do produto -->
+        </article>
+
+      <!-- COMANDO PYTHON: Caso a lista "ofertas" esteja vazia (nenhum produto no banco), exibe o aviso abaixo -->
+      {% else %}
+        <p>Nenhuma oferta cadastrada no banco de dados ainda. Execute o arquivo atualizador.py primeiro.</p>
+
+      <!-- COMANDO PYTHON: Encerra o laço de repetição -->
+      {% endfor %}
+
+    <!-- Fecha a grade de produtos -->
+    </section>
+
+  <!-- Fecha o conteúdo principal -->
+  </main>
+
+  <!-- Cria o rodapé da página -->
+  <footer class="rodape">
+
+    <!-- Centraliza o texto do rodapé -->
+    <div class="container">
+
+      <!-- Aviso legal -->
+      <p>Os preços e estoques são de responsabilidade das lojas oficiais e podem sofrer alterações sem aviso prévio.</p>
+
+    <!-- Fecha o container do rodapé -->
+    </div>
+
+  <!-- Fecha o rodapé -->
+  </footer>
+
+<!-- Fecha o corpo da página -->
+</body>
+
+<!-- Encerra o documento HTML -->
+</html>
